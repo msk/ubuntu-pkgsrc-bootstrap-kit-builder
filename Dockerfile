@@ -9,13 +9,13 @@ RUN \
     git
 
 ENV \
-    GZIP_BINARY_KIT=/usr/pkgsrc/packages/bootstrap.tar.gz \
-    PKGSRC_BRANCH=trunk
+    branch=trunk \
+    packages=/mnt/packages
 
 CMD \
   cd /usr && \
-  git clone -b ${PKGSRC_BRANCH} \
+  git clone -b ${branch} \
     --depth 1 https://github.com/NetBSD/pkgsrc.git && \
   cd pkgsrc/bootstrap && \
-  env SH=/bin/bash ./bootstrap --gzip-binary-kit ${GZIP_BINARY_KIT} && \
+  env SH=/bin/bash ./bootstrap --gzip-binary-kit ${packages}/bootstrap.tar.gz && \
   ./cleanup

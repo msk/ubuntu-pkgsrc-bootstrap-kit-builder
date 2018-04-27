@@ -5,17 +5,20 @@ MAINTAINER Min Kim <minskim@pkgsrc.org>
 RUN \
   apt-get update && \
   apt-get install -y \
-    gcc \
-    git
+    curl \
+    gcc
 
 ENV \
-    GZIP_BINARY_KIT=/usr/pkgsrc/packages/bootstrap.tar.gz \
-    PKGSRC_BRANCH=trunk
+    gitref=trunk \
+    packages=/mnt/packages
 
 CMD \
-  cd /usr && \
-  git clone -b ${PKGSRC_BRANCH} \
-    --depth 1 https://github.com/NetBSD/pkgsrc.git && \
-  cd pkgsrc/bootstrap && \
-  env SH=/bin/bash ./bootstrap --gzip-binary-kit ${GZIP_BINARY_KIT} && \
+  curl -L https://api.github.com/repos/NetBSD/pkgsrc/tarball/${gitref} | \
+    tar -zxf - -C /usr && \
+  mv /usr/NetBSD-pkgsrc-* /usr/pkgsrc && \
+  cd /usr/pkgsrc/bootstrap && \
+  if [ -f ${packages}/bootstrap.tar.gz ]; then \
+    mv -f ${packages}/bootstrap.tar.gz ${packages}/bootstrap.old.tar.gz; \
+  fi && \
+  env SH=/bin/bash ./bootstrap --gzip-binary-kit ${packages}/bootstrap.tar.gz && \
   ./cleanup

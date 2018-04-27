@@ -6,8 +6,7 @@ RUN \
   apt-get update && \
   apt-get install -y \
     gcc \
-    git \
-    libssl-dev
+    git
 
 ENV \
     branch=trunk \

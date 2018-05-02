@@ -1,6 +1,8 @@
-FROM ubuntu:latest
+FROM ubuntu:18.04
 
 MAINTAINER Min Kim <minskim@pkgsrc.org>
+
+COPY pkgsrc-bootstrap.conf /etc/
 
 RUN \
   apt-get update && \
@@ -20,5 +22,6 @@ CMD \
   if [ -f ${packages}/bootstrap.tar.gz ]; then \
     mv -f ${packages}/bootstrap.tar.gz ${packages}/bootstrap.old.tar.gz; \
   fi && \
-  env SH=/bin/bash ./bootstrap --gzip-binary-kit ${packages}/bootstrap.tar.gz && \
+  env SH=/bin/bash ./bootstrap --mk-fragment /etc/pkgsrc-bootstrap.conf \
+    --gzip-binary-kit ${packages}/bootstrap.tar.gz && \
   ./cleanup

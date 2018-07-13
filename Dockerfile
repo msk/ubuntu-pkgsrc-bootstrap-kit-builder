@@ -8,7 +8,8 @@ RUN \
   apt-get update && \
   apt-get install -y \
     curl \
-    gcc
+    gcc \
+    libssl-dev
 
 ENV \
     gitref=trunk \

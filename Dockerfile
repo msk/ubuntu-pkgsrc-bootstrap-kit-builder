@@ -13,9 +13,9 @@ RUN \
 
 ENV \
     BOOTSTRAP_MAKE_JOBS=1 \
-    DEFAULT_MAKE_JOBS=1 \
+    PKGSRC_MAKE_JOBS=1 \
     gitref=trunk \
-    packages=/mnt/packages
+    packages=/packages
 
 CMD \
   curl -L https://api.github.com/repos/NetBSD/pkgsrc/tarball/${gitref} | \
@@ -25,7 +25,7 @@ CMD \
   if [ -f ${packages}/bootstrap.tar.gz ]; then \
     mv -f ${packages}/bootstrap.tar.gz ${packages}/bootstrap.old.tar.gz; \
   fi && \
-  echo "\nMAKE_JOBS?=	${DEFAULT_MAKE_JOBS}" >> /etc/pkgsrc-bootstrap.conf && \
+  echo "\nMAKE_JOBS?=	${PKGSRC_MAKE_JOBS}" >> /etc/pkgsrc-bootstrap.conf && \
   env SH=/bin/bash ./bootstrap --mk-fragment /etc/pkgsrc-bootstrap.conf \
     --gzip-binary-kit ${packages}/bootstrap.tar.gz \
     --make-jobs ${BOOTSTRAP_MAKE_JOBS} && \

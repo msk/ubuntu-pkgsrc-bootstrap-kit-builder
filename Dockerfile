@@ -7,8 +7,8 @@ COPY pkgsrc-bootstrap.conf /etc/
 RUN \
   apt-get update && \
   apt-get install -y \
+    clang \
     curl \
-    gcc \
     libssl-dev
 
 ENV \
@@ -26,7 +26,9 @@ CMD \
     mv -f ${packages}/bootstrap.tar.gz ${packages}/bootstrap.old.tar.gz; \
   fi && \
   echo "\nMAKE_JOBS?=	${PKGSRC_MAKE_JOBS}" >> /etc/pkgsrc-bootstrap.conf && \
-  env SH=/bin/bash ./bootstrap --mk-fragment /etc/pkgsrc-bootstrap.conf \
+  env CC=clang SH=/bin/bash ./bootstrap \
+    --compiler clang \
     --gzip-binary-kit ${packages}/bootstrap.tar.gz \
-    --make-jobs ${BOOTSTRAP_MAKE_JOBS} && \
+    --make-jobs ${BOOTSTRAP_MAKE_JOBS} \
+    --mk-fragment /etc/pkgsrc-bootstrap.conf && \
   ./cleanup
